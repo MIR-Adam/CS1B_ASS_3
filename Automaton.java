@@ -13,6 +13,7 @@ class Automaton {
 
 	// default constructor
 	public Automaton(int new_rule) {
+
 		// rules boolean constructor
 		rules = new boolean[8];
 
@@ -24,6 +25,7 @@ class Automaton {
 	}
 
 	public void resetFirstGen() {
+
 		extremeBit = " ";
 		thisGen = "*";
 	}
@@ -37,27 +39,29 @@ class Automaton {
 			}
 		} else {
 
-		}
-		for (int i = 0; i < rules.length; i++) {
+			for (int i = 0; i < rules.length; i++) {
 
-			if (new_rule % 2 == 1) {
-				rules[i] = true;
-			} else {
-				rules[i] = false;
+				if (new_rule % 2 == 1) {
+					rules[i] = true;
+				} else {
+					rules[i] = false;
+				}
 			}
 		}
 		return true;
 	}
 
 	public boolean setDisplayWidth(int width) {
+
 		if (width > MAX_DISPLAY_WIDTH) {
 			return false;
 		}
 		displayWidth = width;
 		return true;
 	}
-	
+
 	public String toStringCurrentGen() {
+
 		String autoString = thisGen;
 		String emptyString = " ";
 		int emptySpaces = (displayWidth - thisGen.length());
@@ -67,34 +71,55 @@ class Automaton {
 
 			// for each empty space greater than 0
 			for (int i = 0; i < emptySpaces; i++) {
-				
+
 				emptyString = emptyString + extremeBit;
 			}
-		
-		autoString = emptyString + thisGen + emptyString;
-	}
+
+			autoString = emptyString + thisGen + emptyString;
+		}
 		// if there are less than 0 empty spaces
 		else if (emptySpaces < 0) {
-			//adjusts and centers displayWidth
+			// adjusts and centers displayWidth
 			autoString.substring(-emptySpaces, thisGen.length() + emptySpaces);
 		}
-			return autoString;
+		return autoString;
 	}
 
 	public void propagateNewGeneration() {
-		String nextGen;
-		String storageString;
+
+		String newGenerationString = " ";
 		int binaryIndex = 0;
-		
+
 		thisGen = extremeBit + extremeBit + thisGen + extremeBit + extremeBit;
-		
-		//propagate nextGen
-		for (int i = 1; i < thisGen.length() - 1; i++)
-		{
+
+		// propagate nextGen
+		for (int i = 1; i < thisGen.length() - 1; i++) {
+
 			binaryIndex = 0;
-			int k = 4;
-			
+			int base = 4;
+
+			for (int k = 0; k < 3; k++) {
+
+				if (thisGen.charAt(i + k + 1) == '*') {
+					binaryIndex += base;
+					base = base / 2;
+				}
+				if (rules[binaryIndex]) {
+					newGenerationString = newGenerationString + '*';
+
+				} else {
+					newGenerationString = newGenerationString + " ";
+				}
+			}
+			// extreme bit rule check
+			if (extremeBit == " " && rules[0]) {
+				extremeBit = "*";
+			}
+			if (extremeBit == "*" && !rules[7]) {
+				extremeBit = " ";
+			}
+			// transfer the generation
+			thisGen = newGenerationString;
 		}
-		
 	}
 }
