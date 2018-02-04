@@ -16,14 +16,18 @@ class Automaton {
 
 		// rules boolean constructor
 		rules = new boolean[8];
-
-		// set displayWidth integer for new rule
-		if (setRule(new_rule)) {
-			displayWidth = MAX_DISPLAY_WIDTH;
-		}
 		resetFirstGen();
+		setDisplayWidth(MAX_DISPLAY_WIDTH);
+		setRule(new_rule);
 	}
 
+	//constructor overloader
+	public Automaton()
+	{
+		//defaults to rule 0
+		this(0);
+	}
+	
 	public void resetFirstGen() {
 
 		extremeBit = " ";
@@ -37,6 +41,8 @@ class Automaton {
 			for (int i = 0; i < rules.length; i++) {
 				rules[i] = false;
 			}
+			return false;
+
 		} else {
 
 			for (int i = 0; i < rules.length; i++) {
@@ -46,6 +52,7 @@ class Automaton {
 				} else {
 					rules[i] = false;
 				}
+				new_rule = new_rule / 2;
 			}
 		}
 		return true;
@@ -64,7 +71,7 @@ class Automaton {
 
 		String autoString = thisGen;
 		String emptyString = " ";
-		int emptySpaces = (displayWidth - thisGen.length());
+		int emptySpaces = (displayWidth - thisGen.length()/2);
 
 		// if there is one or more empty spaces
 		if (emptySpaces > 0) {
@@ -80,7 +87,7 @@ class Automaton {
 		// if there are less than 0 empty spaces
 		else if (emptySpaces < 0) {
 			// adjusts and centers displayWidth
-			autoString.substring(-emptySpaces, thisGen.length() + emptySpaces);
+			autoString = autoString.substring(-emptySpaces, thisGen.length() + emptySpaces);
 		}
 		return autoString;
 	}
@@ -100,7 +107,7 @@ class Automaton {
 
 			for (int k = 0; k < 3; k++) {
 
-				if (thisGen.charAt(i + k + 1) == '*') {
+				if (thisGen.charAt(i - 1 + k) == '*') {
 					binaryIndex += base;
 					base = base / 2;
 				}

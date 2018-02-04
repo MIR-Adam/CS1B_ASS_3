@@ -22,7 +22,7 @@ public class Foothill {
 		// construct automaton
 		autoReference = new Automaton(rule);
 		// set display width
-		autoReference.setDisplayWidth(121);
+		autoReference.setDisplayWidth(79);
 
 		// starting point of printed rule:
 		System.out.println("Start:");
@@ -34,6 +34,5 @@ public class Foothill {
 		}
 		System.out.println("End:");
 		ruleScanner.close();
-
 	}
 }
