@@ -13,7 +13,7 @@ public class Foothill {
 		Scanner ruleScanner = new Scanner(System.in);
 
 		do {
-			System.out.println("Please input a rule between 0-255! ");
+			System.out.println("Please input a rule between 0-255!");
 			// have the scanner read the string input
 			userRuleInputString = ruleScanner.nextLine();
 			// convert the string to integer

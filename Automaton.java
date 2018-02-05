@@ -5,6 +5,7 @@ class Automaton {
 
 	// private members
 	private boolean rules[]; // allocate rules[8] in constructor!
+	private String rulesTemplate[] = new String[8];
 	private String thisGen; // same here
 	String extremeBit; // bit, "*" or " ", implied everywhere "outside"
 	int displayWidth; // an odd number so it can be perfectly centered
@@ -19,15 +20,15 @@ class Automaton {
 		resetFirstGen();
 		setDisplayWidth(MAX_DISPLAY_WIDTH);
 		setRule(new_rule);
+		setRulesTemplate();
 	}
 
-	//constructor overloader
-	public Automaton()
-	{
-		//defaults to rule 0
+	// constructor overloader
+	public Automaton() {
+		// defaults to rule 0
 		this(0);
 	}
-	
+
 	public void resetFirstGen() {
 
 		extremeBit = " ";
@@ -58,6 +59,28 @@ class Automaton {
 		return true;
 	}
 
+	public void setRulesTemplate() {
+
+		for (int i = 0; i < 8; i++)
+			rulesTemplate[i] = "";
+
+		for (int k = 0; k < 8; k++) {
+
+			int current = k;
+
+			for (int i = 0; i < 3; i++) {
+				if (current % 2 == 0) {
+
+					rulesTemplate[k] = " " + rulesTemplate[k];
+					current = current / 2;
+				} else {
+					rulesTemplate[k] = "*" + rulesTemplate[k];
+					current = (current - 1) / 2;
+				}
+			}
+		}
+	}
+
 	public boolean setDisplayWidth(int width) {
 
 		if (width > MAX_DISPLAY_WIDTH) {
@@ -71,7 +94,7 @@ class Automaton {
 
 		String autoString = thisGen;
 		String emptyString = " ";
-		int emptySpaces = (displayWidth - thisGen.length()/2);
+		int emptySpaces = (displayWidth - thisGen.length() / 2);
 
 		// if there is one or more empty spaces
 		if (emptySpaces > 0) {
@@ -94,30 +117,29 @@ class Automaton {
 
 	public void propagateNewGeneration() {
 
-		String newGenerationString = " ";
-		int binaryIndex = 0;
+		String nextGenerationString = "";
+		String bitCompareString = "";
+		String currentGenerationString = thisGen;
 
-		thisGen = extremeBit + extremeBit + thisGen + extremeBit + extremeBit;
+		for (int i = 0; i < 3 - 1; i++)
+			currentGenerationString = extremeBit + currentGenerationString + extremeBit;
 
 		// propagate nextGen
-		for (int i = 1; i < thisGen.length() - 1; i++) {
 
-			binaryIndex = 0;
-			int base = 4;
+		for (int k = 0; k < currentGenerationString.length() + 1 - 3; k++) {
 
-			for (int k = 0; k < 3; k++) {
+			bitCompareString = currentGenerationString.substring(k, k + 3); // set the range for comparison
 
-				if (thisGen.charAt(i - 1 + k) == '*') {
-					binaryIndex += base;
-					base = base / 2;
-				}
-				if (rules[binaryIndex]) {
-					newGenerationString = newGenerationString + '*';
+			for (int c = 0; c < 8; c++) {
 
-				} else {
-					newGenerationString = newGenerationString + " ";
+				if (bitCompareString.equals(rulesTemplate[c])) {
+					nextGenerationString += rules[c] ? "*" : " ";
 				}
 			}
+
+			// transfer the generation
+			thisGen = nextGenerationString;
+
 			// extreme bit rule check
 			if (extremeBit == " " && rules[0]) {
 				extremeBit = "*";
@@ -125,8 +147,7 @@ class Automaton {
 			if (extremeBit == "*" && !rules[7]) {
 				extremeBit = " ";
 			}
-			// transfer the generation
-			thisGen = newGenerationString;
+
 		}
 	}
 }
