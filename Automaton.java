@@ -83,7 +83,7 @@ class Automaton {
 
 	public boolean setDisplayWidth(int width) {
 
-		if (width > MAX_DISPLAY_WIDTH) {
+		if (width % 2 == 0 || width > MAX_DISPLAY_WIDTH) {
 			return false;
 		}
 		displayWidth = width;
@@ -93,7 +93,7 @@ class Automaton {
 	public String toStringCurrentGen() {
 
 		String autoString = thisGen;
-		String emptyString = " ";
+		String emptyString = "";
 		int emptySpaces = (displayWidth - thisGen.length() / 2);
 
 		// if there is one or more empty spaces
@@ -123,6 +123,8 @@ class Automaton {
 
 		for (int i = 0; i < 3 - 1; i++)
 			currentGenerationString = extremeBit + currentGenerationString + extremeBit;
+		
+		  thisGen = extremeBit + extremeBit + thisGen + extremeBit + extremeBit;
 
 		// propagate nextGen
 
